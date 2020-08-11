@@ -1,0 +1,151 @@
+---
+title: "Modelos de Gráficos usando o ggplot"
+author: "Fernando Bastos"
+date: "11/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## ggplot
+
+O ggplot2 é um pacote de visualização de dados para a linguagem de programação estatística R. Criado por Hadley Wickham em 2005, o ggplot2 é uma implementação da Grammar of Graphics de Leland Wilkinson - um esquema geral para visualização de dados que divide gráficos em componentes semânticos, como escalas e camadas (Wikipédia).
+
+Primeiro vamos considerar um banco de dados. Considere o banco de dados já na base do R chamado mtcars.
+
+```{r}
+dados <- mtcars
+head(dados)
+str(dados)
+dados$cyl  <- as.factor(dados$cyl )
+dados$vs   <- as.factor(dados$vs  )
+dados$am   <- as.factor(dados$am  )
+dados$gear <- as.factor(dados$gear)
+dados$carb <- as.factor(dados$carb)
+```
+
+Agora já podemos começar a exemplificar o uso do pacote ggplot. Chamamos o pacote:
+
+```{r}
+library(ggplot2)
+```
+
+Como não podemos deixar de usar o operador pipe (%>%) chamamos também o pacote:
+
+```{r}
+library(tidyverse)
+```
+
+Pronto, agora mãos a obra. No ggplot2, os gráficos são construídos camada por camada (ou, *layers*, em inglês), sendo que a primeira delas é dada pela função ggplot (não tem o "2"). O primeiro argumento é o banco de dados:
+
+```{r}
+ggplot()
+```
+
+Nesse caso, foi alocado um espaço para a construção do gráfico. É como se dissessemos para o R, "vou construir um gráfico aqui!".
+
+Continuando, o primeiro argumento é o banco de dados, que pode ser acrescentado de duas formas, assim:
+
+```{r}
+ggplot(dados)
+```
+
+ou assim:
+
+```{r}
+dados %>% ggplot()
+```
+
+Ainda não visualizamos nada, somente alocamos o espaço para o gráfico. O segundo passo é determinar a relação entre os dados e cada aspecto visual do gráfico, como qual variável será representada no eixo x, qual será representada no eixo y, a cor e o tamanho dos componentes geométricos etc. Os aspectos que podem ou devem ser mapeados depende do tipo de gráfico que você deseja fazer. Esse passo é feito com a função _aes()_. É dentro desta função que indicamos para o R as variáveis a serem utilizadas na construção do gráfico. Por exemplo, suponha que queiramos utilizar o número de cilindros no eixo x. Fazemos então:
+
+```{r}
+dados %>% ggplot(aes(cyl))
+```
+
+
+Podemos ainda indicar também o eixo y:
+
+```{r}
+dados %>% ggplot(aes(cyl,qsec))
+```
+
+
+Observem que o gráfico ainda não foi criado, para isso, precisamos indicar qual gráfico desejamos. Pode ser vários, por exemplo:
+
+* geom_line: para retas definidas por pares (x,y)
+* geom_abline: para retas definidas por um intercepto e uma inclinação
+* geom_hline: para retas horizontais
+* geom_boxplot: para boxplots
+* geom_histogram: para histogramas
+* geom_density: para densidades
+* geom_area: para áreas
+* geom_bar: para barras
+
+No caso de nossas variáveis vamos utilizar um boxplot, fazemos então:
+
+```{r}
+dados %>% ggplot(aes(cyl, qsec)) + geom_boxplot()
+```
+
+
+Observe que nesse caso funcionou perfeitamente bem, pois já indicamos anteriormente que a variável _cyl_ é um fator, caso contrário, teríamos que fazer:
+
+```{r}
+dados %>% ggplot(aes(as.factor(cyl), qsec)) + geom_boxplot()
+```
+
+se quisermos fazer um histograma, basta indicar a variável, fazemos da seguinte forma:
+
+```{r}
+dados %>% ggplot(aes(qsec)) + geom_histogram()
+```
+
+Podemos ainda escolher diversos temas:
+
+* theme_gray (): Cor de fundo cinza e linhas de grade brancas. Apresente os dados para facilitar as comparações.
+* theme_bw (): Fundo branco e linhas de grade cinza. Pode funcionar melhor para apresentações exibidas com um projetor.
+* theme_linedraw (): Um tema com linhas pretas de várias larguras em fundos brancos, uma reminiscência de desenhos de linha.
+* theme_light (): Um tema semelhante a theme_linedraw (), mas com linhas e eixos cinza claro, para direcionar mais atenção para os dados.
+* theme_dark (): O mesmo que theme_light, mas com um fundo escuro. Útil para destacar linhas finas coloridas.
+* theme_minimal (): Um tema mínimo sem anotações de fundo
+* theme_classic (): Um tema clássico, com linhas dos eixos xey e sem linhas de grade.
+* theme_void (): um tema completamente vazio, útil para plotagens com coordenadas não padronizadas ou para desenhos.
+
+
+```{r}
+p <- dados %>% ggplot(aes(qsec)) + geom_histogram()
+p + theme_gray()
+p + theme_bw()
+```
+
+
+
+O pacote R ggthemes fornece outra galeria de temas personalizados do ggplot, que incluem:
+
+* theme_tufte (): um tema minimalista
+* theme_economist (): tema baseado nos enredos da revista economist
+* theme_stata (): tema baseado em esquemas de gráficos estatísticos.
+* theme_hc (): tema baseado em Highcharts JS
+
+```{r}
+library(ggthemes)
+p + theme_stata()
+```
+
+Podemos mudar as cores das variáveis com o comando col, vejamos:
+
+
+```{r}
+dados %>% ggplot(aes(qsec), col=red) + geom_histogram()
+```
+
+
+
+
+
+
+
+
+
