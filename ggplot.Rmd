@@ -138,9 +138,14 @@ Podemos mudar as cores das variáveis com o comando col, vejamos:
 
 
 ```{r}
-dados %>% ggplot(aes(qsec), col=red) + geom_histogram()
+dados %>% ggplot(aes(qsec)) + geom_histogram(fill="red")
 ```
 
+Podemos ainda alterar o número de categorias, utilizando:
+
+```{r}
+dados %>% ggplot(aes(qsec)) + geom_histogram(breaks=seq(15, 25, by=1),fill="red")
+```
 
 
 
