@@ -146,7 +146,7 @@ Podemos ainda alterar o número de categorias, utilizando:
 ```{r}
 dados %>% ggplot(aes(qsec)) + geom_histogram(breaks=seq(15, 25, by=1),fill="red")
 ```
-
+É isso, agora, teremos arquivos separados para cada tipo de gráfico.
 
 
 
